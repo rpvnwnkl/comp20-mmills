@@ -9,6 +9,23 @@
     function parse() {
       jsonData = '[{"id":1,"content":"Do you really want to hurt me?","username":"Boy"},{"id":2,"content":"Do you really want to make me cry?","username":"George"}]';
       // Your code here......
+      parsedJson = eval(jsonData);
+      //console.log(parsedJson);
+      msgBox = document.getElementById("messages");
+      for (i = 0; i < parsedJson.length; i++) {
+        //create child
+        currChild = msgBox.appendChild(document.createElement('div'));
+        //create message and username elements
+        currMsg = currChild.appendChild(document.createElement('span'));
+        currMsg.setAttribute('class', 'message');
+        currUsr = currChild.appendChild(document.createElement('span'));
+        currUsr.setAttribute('class', 'username');
+        //populate message and username from json
+        currMsg.textContent = parsedJson[i].content;
+        currUsr.textContent = parsedJson[i].username;
+        
+        
+      }
     }
   </script>
 </head>
