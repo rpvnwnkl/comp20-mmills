@@ -1,0 +1,12 @@
+
+body {
+    position: relative;
+    text-align: center;
+    margin: auto;
+}
+video {
+}
+#lyrics {
+    margin: auto;
+    width: 100%;
+}

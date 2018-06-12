@@ -15,8 +15,206 @@
 
 <script>
 	// Complete this section and create a CSS file named style.css
-  vidPlayer = document.getElementById("rickroll");
-  console.log(vidPlayer.currentTime);
+  var lyricBox = document.getElementById("lyrics");
+  var vidPlayer = document.getElementById("rickroll");
+
+  //from https://stackoverflow.com/questions/6454198/check-a-range-of-numbers-in-an-if-condition
+  function between(x, min, max) {
+    return (x >= min && x <= max);
+  }
+
+  //from https://github.com/tuftsdev/WebProgramming/blob/gh-pages/examples/doublerainbow/index.html
+  vidPlayer.addEventListener("timeupdate", function() {
+    console.log(vidPlayer.currentTime);
+    var currTime = vidPlayer.currentTime;
+
+    //from https://amara.org/en/videos/z1TYlTpxFbGC/en-gb/122841/
+    if (between(currTime, 18, 22)) {
+      newLine = "We're no strangers to love";
+    }
+    else if (between(currTime, 22, 27)) {
+      newLine = "You know the rules and so do I";
+    }
+    else if (between(currTime, 27, 31)) {
+      newLine = "A full commitment's what I'm thinking of";
+    }
+    else if (between(currTime, 31, 35)) {
+      newLine = "You wouldn't get this from any other guy";
+    }
+    else if (between(currTime, 35, 40)) {
+      newLine = "I just wanna tell you how I'm feeling";
+    }
+    else if (between(currTime, 40, 43)) {
+      newLine = "Gotta make you understand";
+    }
+    else if (between(currTime, 43, 45)) {
+      newLine = "Never gonna give you up";
+    }
+    else if (between(currTime, 45, 47)) {
+      newLine = "Never gonna let you down";
+    }
+    else if (between(currTime, 47, 52)) {
+      newLine = "Never gonna run around and desert you";
+    }
+    else if (between(currTime, 52, 53)) {
+      newLine = "Never gonna make you cry";
+    }
+    else if (between(currTime, 53, 56)) {
+      newLine = "Never gonna say goodbye";
+    }
+    else if (between(currTime, 56, 61)) {
+      newLine = "Never gonna tell a lie and hurt you";
+    }
+    else if (between(currTime, 61, 65)) {
+      newLine = "We've known each other for so long";
+    }
+    else if (between(currTime, 65, 69)) {
+      newLine = "Your heart's been aching but you're too shy to say it";
+    }
+    else if (between(currTime, 69, 73)) {
+      newLine = "Inside we both know what's been going on";
+    }
+    else if (between(currTime, 73, 77)) {
+      newLine = "We know the game and we're gonna play it";
+    }
+    else if (between(currTime, 77, 82)) {
+      newLine = "And if you ask me how I'm feeling";
+    }
+    else if (between(currTime, 82, 85)) {
+      newLine = "Don't tell me you're too blind to see";
+    }
+    else if (between(currTime, 85, 87)) {
+      newLine = "Never gonna give you up";
+    }
+    else if (between(currTime, 87, 89)) {
+      newLine = "Never gonna let you down";
+    }
+    else if (between(currTime, 89, 94)) {
+      newLine = "Never gonna run around and desert you";
+    }
+    else if (between(currTime, 94, 96)) {
+      newLine = "Never gonna make you cry";
+    }
+    else if (between(currTime, 96, 98)) {
+      newLine = "Never gonna say goodbye";
+    }
+    else if (between(currTime, 98, 102)) {
+      newLine = "Never gonna tell a lie and hurt you";
+    }
+    else if (between(currTime, 102, 104)) {
+      newLine = "Never gonna give you up";
+    }
+    else if (between(currTime, 104, 106)) {
+      newLine = "Never gonna let you down";
+    }
+    else if (between(currTime, 106, 111)) {
+      newLine = "Never gonna run around and desert you";
+    }
+    else if (between(currTime, 111, 112)) {
+      newLine = "Never gonna make you cry";
+    }
+    else if (between(currTime, 112, 115)) {
+      newLine = "Never gonna say goodbye";
+    }
+    else if (between(currTime, 115, 119)) {
+      newLine = "Never gonna tell a lie and hurt you";
+    }
+    else if (between(currTime, 119, 124)) {
+      newLine = "Ooh give you up";
+    }
+    else if (between(currTime, 124, 127)) {
+      newLine = "Ooh give you up";
+    }
+    else if (between(currTime, 127, 130)) {
+      newLine = "Ooh never gonna give, never gonna give";
+    }
+    else if (between(currTime, 130, 132)) {
+      newLine = "Give you up";
+    }
+    else if (between(currTime, 132, 134)) {
+      newLine = "Ooh never gonna give, never gonna give";
+    }
+    else if (between(currTime, 134, 137)) {
+      newLine = "Give you up";
+    }
+    else if (between(currTime, 137, 141)) {
+      newLine = "We've known each other for so long";
+    }
+    else if (between(currTime, 141, 145)) {
+      newLine = "Your heart's been aching but you're too shy to say it";
+    }
+    else if (between(currTime, 145, 149)) {
+      newLine = "Inside we both know what's been going on";
+    }
+    else if (between(currTime, 149, 153)) {
+      newLine = "We know the game and we're gonna play it";
+    }
+    else if (between(currTime, 153, 158)) {
+      newLine = "I just wanna tell you how I'm feeling";
+    }
+    else if (between(currTime, 158, 161)) {
+      newLine = "Gotta make you understand";
+    }
+    else if (between(currTime, 161, 163)) {
+      newLine = "Never gonna give you up";
+    }
+    else if (between(currTime, 163, 165)) {
+      newLine = "Never gonna let you down";
+    }
+    else if (between(currTime, 165, 170)) {
+      newLine = "Never gonna run around and desert you";
+    }
+    else if (between(currTime, 170, 172)) {
+      newLine = "Never gonna make you cry";
+    }
+    else if (between(currTime, 172, 174)) {
+      newLine = "Never gonna say goodbye";
+    }
+    else if (between(currTime, 174, 178)) {
+      newLine = "Never gonna tell a lie and hurt you";
+    }
+    else if (between(currTime, 178, 180)) {
+      newLine = "Never gonna give you up";
+    }
+    else if (between(currTime, 180, 182)) {
+      newLine = "Never gonna let you down";
+    }
+    else if (between(currTime, 182, 187)) {
+      newLine = "Never gonna run around and desert you";
+    }
+    else if (between(currTime, 187, 189)) {
+      newLine = "Never gonna make you cry";
+    }
+    else if (between(currTime, 189, 191)) {
+      newLine = "Never gonna say goodbye";
+    }
+    else if (between(currTime, 191, 195)) {
+      newLine = "Never gonna tell a lie and hurt you";
+    }
+    else if (between(currTime, 195, 197)) {
+      newLine = "Never gonna give you up";
+    }
+    else if (between(currTime, 197, 199)) {
+      newLine = "Never gonna let you down";
+    }
+    else if (between(currTime, 199, 203)) {
+      newLine = "Never gonna run around and desert you";
+    }
+    else if (between(currTime, 203, 206)) {
+      newLine = "Never gonna make you cry";
+    }
+    else if (between(currTime, 206, 208)) {
+      newLine = "Never gonna say goodbye";
+    }
+    else if (between(currTime, 208, 212)) {
+      newLine = "Never gonna tell a lie and hurt you";
+    }
+    else {
+      newLine = "";
+    }
+    //from https://developer.mozilla.org/en-US/docs/Web/API/Document/createTextNode
+    lyricBox.textContent = newLine;
+  });
 </script>
 </body>
 </html>	
