@@ -3,10 +3,25 @@ body {
     position: relative;
     text-align: center;
     margin: auto;
+    width: 100%;
+    background-color: blue;
+
+}
+h1 {
+    color: yellow;
+    text-shadow: 1px 1px 2px #1A78B8;
 }
 video {
+    max-width: 80%;
 }
 #lyrics {
     margin: auto;
     width: 100%;
+    font-size: 2em;
+    font-family: sans-serif;
+    color: red;    
+    text-shadow: 1px 1px 2px #1A78B8;
+    position: absolute;
+    top: 50%;
+
 }
