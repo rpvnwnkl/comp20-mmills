@@ -1,0 +1,23 @@
+stop_id,stop_name,stop_lat,stop_lon
+place-alfcl,Alewife,42.395428,-71.142483
+place-andrw,Andrew,42.330154,-71.057655
+place-asmnl,Ashmont,42.284652,-71.064489
+place-brdwy,Broadway,42.342622,-71.056967
+place-brntn,Braintree,42.2078543,-71.0011385
+place-chmnl,Charles/MGH,42.361166,-71.070628
+place-cntsq,Central,42.365486,-71.103802
+place-davis,Davis,42.39674,-71.121815
+place-dwnxg,Downtown Crossing,42.355518,-71.060225
+place-fldcr,Fields Corner,42.300093,-71.061667
+place-harsq,Harvard,42.373362,-71.118956
+place-jfk,JFK/UMass,42.320685,-71.052391
+place-knncl,Kendall/MIT,42.36249079,-71.08617653
+place-nqncy,North Quincy,42.275275,-71.029583
+place-pktrm,Park Street,42.35639457,-71.0624242
+place-portr,Porter,42.3884,-71.119149
+place-qamnl,Quincy Adams,42.233391,-71.007153
+place-qnctr,Quincy Center,42.251809,-71.005409
+place-shmnl,Savin Hill,42.31129,-71.053331
+place-smmnl,Shawmut,42.29312583,-71.06573796
+place-sstat,South Station,42.352271,-71.055242
+place-wlsta,Wollaston,42.2665139,-71.0203369
