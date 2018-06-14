@@ -5,7 +5,7 @@
 > ```1. Identify what aspects of the work have been correctly implemented and what have not.```
 
 Inside of the **lyrics** div I've annotated the video, in time, with the lyrics themselves. I did this with **Javascript** and then added some styling with **CSS**.
-However, I haven't presented the lyric text grouped by stanza, but by line, because I want intent on displaying the text over the video itself. Depending on your interpretation of the assignment, this could be wrong.
+However, I haven't presented the lyric text grouped by stanza, but by line, because I was intent on displaying the text over the video itself. Depending on your interpretation of the assignment, this could be wrong.
 
 > ```1. Identify anyone with whom you have collaborated or discussed the assignment.```
 
