@@ -13,7 +13,7 @@ No collaborators, but some ideas and code inspirations were drawn from elsewhere
 
 > ```2. Say approximately how many hours you have spent completing the assignment.```
 
-   4 hrs 
+   ~4 hrs 
 
 > ```3. Be written in either text format (**README.txt**) or in Markdown (**README.md**). Markdown is preferred. No other formats will be accepted. Please use all capital letters for README```
 
