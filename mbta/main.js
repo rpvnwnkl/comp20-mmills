@@ -1,5 +1,6 @@
 var map;
 var markers = [];
+
 //image from https://fallout4.wiki/images/layout/vault-boy-happy.png
 var image = "vault-boy-happy-small.png"
 
@@ -138,10 +139,12 @@ var redLine = [
       "stop_lon": -71.0203369
     }
   ]
+//parsing json into lat/long dict by station name
 var redLineDict = {};
 for (i = 0; i < redLine.length; i++) {
     redLineDict[redLine[i].stop_name] = {lat: redLine[i].stop_lat, lng: redLine[i].stop_lon};
 };
+//listing all the routes to use for pathways
 var AlewifeRoute = [
     "Alewife",
     "Davis",
@@ -173,18 +176,22 @@ var AshmontRoute = [
     "Ashmont"
 ]
 var routeList = [AlewifeRoute, BraintreeRoute, AshmontRoute]
+
+//initializes the map and draws the stations, then pathways
 function initMap() {
-  map = new google.maps.Map(document.getElementById('map'), {
-    center: redLineDict['South Station'],
-    zoom: 14 
-  });
-  drawStations();
-  for (var i in routeList) {
-      drawPathways(routeList[i]);
-  }
+    //intiMap mostly from https://developers.google.com/maps/documentation/javascript/geolocation#try-it-yourself
+    map = new google.maps.Map(document.getElementById('map'), {
+        center: redLineDict['South Station'],
+        zoom: 14 
+    });
+    drawStations();
+    for (var i in routeList) {
+        drawPathways(routeList[i]);
+    }
 }
-//https://developers.google.com/maps/documentation/javascript/markers
+//takes json and adds each element as a marker location
 function drawStations() {
+    //push marker objects into array from https://developers.google.com/maps/documentation/javascript/markers
     for (i=0; i<redLine.length; i++) {
         markers.push(new google.maps.Marker({
             position: redLineDict[redLine[i].stop_name], 
@@ -194,12 +201,15 @@ function drawStations() {
     }));
   }
 }
-//https://developers.google.com/maps/documentation/javascript/examples/polyline-simple
+
+//Takes a list of stop locations and draws a polyline between them
 function drawPathways(routes) {
+    //drawing a polyline from https://developers.google.com/maps/documentation/javascript/examples/polyline-simple
     var pathway = [];
     for (i = 0; i < routes.length; i++) {
-        console.log(redLineDict[routes[i]]);
-        console.log(pathway.push(redLineDict[routes[i]]));
+        // console.log(redLineDict[routes[i]]);
+        // console.log(pathway.push(redLineDict[routes[i]]));
+        pathway.push(redLineDict[routes[i]]);
     }
     var routePath = new google.maps.Polyline({
         path: pathway,
