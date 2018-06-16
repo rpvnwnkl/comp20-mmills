@@ -1,14 +1,1 @@
-
-body {
-    text-align: left;
-    margin: auto;
-    height: 100%;
-}
-#messages div {
-    display: block;
-    width: 100%;
-    margin: auto;
-} 
-.message .username {
-    display: inline;
-}
+/* Your CSS here... */
