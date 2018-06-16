@@ -1,14 +1,28 @@
 /* Your CSS here... */
 body {
     text-align: left;
-    margin: auto;
-    height: 100%;
+    /* margin: auto; */
+    /* height: 100%; */
+    font-size: 1em;
+    font-family: sans-serif;
+}
+#messages {
+    display:inline-block;
 }
 #messages div {
     display: block;
-    width: 100%;
+    /* width: auto; */
     margin: auto;
+    margin-bottom: 1em;
+    padding: 0.66em 1em 0.5em;
+    border-radius: 1em;
+    background-color: #95f598;
 } 
-.message .username {
+.username, .message {
     display: inline;
+}
+.username {
+    font-style: italic;
+    font-size: 0.75em;
+    padding-left: 0.25em;
 }
