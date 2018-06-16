@@ -21,6 +21,10 @@ body {
 .username, .message {
     display: inline;
 }
+
+.message {
+    font-weight: bold;
+}
 .username {
     font-style: italic;
     font-size: 0.75em;
