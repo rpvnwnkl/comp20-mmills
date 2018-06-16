@@ -188,6 +188,11 @@ function initMap() {
     for (var i in routeList) {
         drawPathways(routeList[i]);
     }
+    //default location in case geolocation not active.
+    var yourLocation = {lat: 42.4082152, lng: -71.1162397};
+    var yourMarker = mapMe(yourLocation);
+    console.log(yourLocation);
+    map.panTo(yourLocation);
 }
 //takes json and adds each element as a marker location
 function drawStations() {
@@ -219,4 +224,25 @@ function drawPathways(routes) {
         strokeWeight: 2,
         map: map
     });
+}
+function mapMe(yourLocation) {
+  //from https://developers.google.com/maps/documentation/javascript/geolocation
+  //and https://github.com/tuftsdev/WebProgramming/blob/gh-pages/examples/google_maps/geolocation_map.html
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      yourLocation = {
+        lat: position.latitude,
+        lng: position.coords.longitude
+      };
+    });
+  }
+  var thisMarker = new google.maps.Marker({
+      position: yourLocation,
+      map: map,
+      title: 'Your Location',
+      // icon: your_image
+  });
+  return thisMarker;
+
+  
 }
