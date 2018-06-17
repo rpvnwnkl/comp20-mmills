@@ -188,11 +188,16 @@ function initMap() {
     for (var i in routeList) {
         drawPathways(routeList[i]);
     }
+    // Geo Location Section
     //default location in case geolocation not active.
     var yourLocation = {lat: 42.4082152, lng: -71.1162397};
     var yourMarker = mapMe(yourLocation);
-    console.log(yourLocation);
-    map.panTo(yourLocation);
+    // console.log('before');
+    // map.panTo(redLineDict['South Station']);
+    // console.log('between');
+    setTimeout(function() { map.panTo(yourLocation); }, 1500);
+      
+    // console.log('after');
 }
 //takes json and adds each element as a marker location
 function drawStations() {
