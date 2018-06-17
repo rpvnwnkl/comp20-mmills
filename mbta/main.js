@@ -1,8 +1,7 @@
 var map;
 var markers = [];
 
-//image from https://fallout4.wiki/images/layout/vault-boy-happy.png
-var image = "vault-boy-happy-small.png"
+
 
 //using https://csvjson.com/csv2json and https://cdn.mbta.com/MBTA_GTFS.zip
 var redLine = [
@@ -188,26 +187,32 @@ function initMap() {
     for (var i in routeList) {
         drawPathways(routeList[i]);
     }
+    //
     // Geo Location Section
+
     //default location in case geolocation not active.
     var yourLocation = {lat: 42.4082152, lng: -71.1162397};
-    var yourMarker = mapMe(yourLocation);
-    // console.log('before');
-    // map.panTo(redLineDict['South Station']);
-    // console.log('between');
+    //marker with location
+    mapMe(yourLocation);
+    //pan to location
     setTimeout(function() { map.panTo(yourLocation); }, 1500);
-      
-    // console.log('after');
 }
 //takes json and adds each element as a marker location
 function drawStations() {
+    //icon formatting from https://stackoverflow.com/questions/32062849/modify-my-custom-marker-image-size-for-my-google-map
+    var redLineStationImage = {
+        url: "https://upload.wikimedia.org/wikipedia/commons/c/c5/Red_flag_waving.svg",
+        scaledSize : new google.maps.Size(52, 62),
+        anchor: new google.maps.Point(22,62)
+    }
+
     //push marker objects into array from https://developers.google.com/maps/documentation/javascript/markers
     for (i=0; i<redLine.length; i++) {
         markers.push(new google.maps.Marker({
             position: redLineDict[redLine[i].stop_name], 
             map: map,
             title: redLine[i].stop_name,
-            icon: image
+            icon: redLineStationImage 
     }));
   }
 }
@@ -231,23 +236,38 @@ function drawPathways(routes) {
     });
 }
 function mapMe(yourLocation) {
-  //from https://developers.google.com/maps/documentation/javascript/geolocation
-  //and https://github.com/tuftsdev/WebProgramming/blob/gh-pages/examples/google_maps/geolocation_map.html
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function(position) {
-      yourLocation = {
-        lat: position.latitude,
-        lng: position.coords.longitude
-      };
+    var yourImage = {
+      url: "https://fallout4.wiki/images/layout/vault-boy-happy.png",
+      scaledSize: new google.maps.Size(92, 102),
+      anchor: new google.maps.Point(67,102)
+    }
+    //from https://developers.google.com/maps/documentation/javascript/geolocation
+    //and https://github.com/tuftsdev/WebProgramming/blob/gh-pages/examples/google_maps/geolocation_map.html
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        yourLocation = {
+          lat: position.latitude,
+          lng: position.coords.longitude
+        };
+      });
+    }
+    yourMarker = new google.maps.Marker({
+        position: yourLocation,
+        map: map,
+        title: 'Your Location',
+        icon: yourImage
     });
-  }
-  var thisMarker = new google.maps.Marker({
-      position: yourLocation,
-      map: map,
-      title: 'Your Location',
-      // icon: your_image
-  });
-  return thisMarker;
+
+    //info window click listener
+    //create info window
+    infoWindow = new google.maps.InfoWindow();
+    //from https://github.com/tuftsdev/WebProgramming/blob/gh-pages/examples/google_maps/geolocation_map.html
+    google.maps.event.addListener(yourMarker, 'click', function() {
+      infoWindow.setContent(yourMarker.title);
+      infoWindow.open(map, yourMarker);
+    });
+
+    return;
 
   
 }
