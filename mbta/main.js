@@ -1,6 +1,17 @@
+
 var map;
 var markers = [];
+var quickRoute = null;
+var targetStation = null;
 
+//default location in case geolocation not active.
+var yourLocation = {lat: 42.4082152, lng: -71.1162397};
+
+//create info window variable
+var infoWindow;
+
+redLineUrl = "https://upload.wikimedia.org/wikipedia/commons/c/c5/Red_flag_waving.svg";
+yourIconUrl = "https://fallout4.wiki/images/layout/vault-boy-happy.png";
 
 
 //using https://csvjson.com/csv2json and https://cdn.mbta.com/MBTA_GTFS.zip
@@ -143,6 +154,7 @@ var redLineDict = {};
 for (i = 0; i < redLine.length; i++) {
     redLineDict[redLine[i].stop_name] = {lat: redLine[i].stop_lat, lng: redLine[i].stop_lon};
 };
+console.log(redLineDict);
 //listing all the routes to use for pathways
 var AlewifeRoute = [
     "Alewife",
@@ -174,38 +186,32 @@ var AshmontRoute = [
     "Shawmut",
     "Ashmont"
 ]
-var routeList = [AlewifeRoute, BraintreeRoute, AshmontRoute]
+var routeList = [AlewifeRoute, BraintreeRoute, AshmontRoute];
 
-//initializes the map and draws the stations, then pathways
+//initializes the map and calls drawing functions
 function initMap() {
+    infoWindow = new google.maps.InfoWindow();
+
     //intiMap mostly from https://developers.google.com/maps/documentation/javascript/geolocation#try-it-yourself
     map = new google.maps.Map(document.getElementById('map'), {
         center: redLineDict['South Station'],
         zoom: 14 
     });
-    drawStations();
-    for (var i in routeList) {
-        drawPathways(routeList[i]);
-    }
-    //
-    // Geo Location Section
-
-    //default location in case geolocation not active.
-    var yourLocation = {lat: 42.4082152, lng: -71.1162397};
-    //marker with location
-    mapMe(yourLocation);
-    //pan to location
-    setTimeout(function() { map.panTo(yourLocation); }, 1500);
+    console.log('goigng to mapme');
+    mapMe();
 }
+
+
 //takes json and adds each element as a marker location
 function drawStations() {
+
     //icon formatting from https://stackoverflow.com/questions/32062849/modify-my-custom-marker-image-size-for-my-google-map
-    var redLineStationImage = {
-        url: "https://upload.wikimedia.org/wikipedia/commons/c/c5/Red_flag_waving.svg",
+    redLineStationImage = {
+        url: redLineUrl,
         scaledSize : new google.maps.Size(52, 62),
         anchor: new google.maps.Point(22,62)
     }
-
+    
     //push marker objects into array from https://developers.google.com/maps/documentation/javascript/markers
     for (i=0; i<redLine.length; i++) {
         markers.push(new google.maps.Marker({
@@ -222,8 +228,6 @@ function drawPathways(routes) {
     //drawing a polyline from https://developers.google.com/maps/documentation/javascript/examples/polyline-simple
     var pathway = [];
     for (i = 0; i < routes.length; i++) {
-        // console.log(redLineDict[routes[i]]);
-        // console.log(pathway.push(redLineDict[routes[i]]));
         pathway.push(redLineDict[routes[i]]);
     }
     var routePath = new google.maps.Polyline({
@@ -235,22 +239,34 @@ function drawPathways(routes) {
         map: map
     });
 }
-function mapMe(yourLocation) {
-    var yourImage = {
-      url: "https://fallout4.wiki/images/layout/vault-boy-happy.png",
-      scaledSize: new google.maps.Size(92, 102),
-      anchor: new google.maps.Point(67,102)
-    }
+//this function gets your location, adds a marker, and then adds and removes bits of visual info on clicks
+function mapMe() {
+    //determine location and set global variable yourLocation
     //from https://developers.google.com/maps/documentation/javascript/geolocation
     //and https://github.com/tuftsdev/WebProgramming/blob/gh-pages/examples/google_maps/geolocation_map.html
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function(position) {
-        yourLocation = {
-          lat: position.latitude,
-          lng: position.coords.longitude
-        };
-      });
+        navigator.geolocation.getCurrentPosition(function(position) {
+            var yourLocation = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+            };
+            renderMap();
+        });
+    } else {
+        renderMap();
     }
+}
+function renderMap() {
+    drawStations();
+    for (var i in routeList) {
+        drawPathways(routeList[i]);
+    }
+    yourImage = {
+      url: yourIconUrl,
+      scaledSize: new google.maps.Size(92, 102),
+      anchor: new google.maps.Point(67,102)
+    }
+    //create marker at yourLocation, with custom image
     yourMarker = new google.maps.Marker({
         position: yourLocation,
         map: map,
@@ -258,16 +274,72 @@ function mapMe(yourLocation) {
         icon: yourImage
     });
 
-    //info window click listener
-    //create info window
-    infoWindow = new google.maps.InfoWindow();
+    //pan to location
+    setTimeout(function() { map.panTo(yourLocation); }, 1000);
+
+    //infowindow click listeners
     //from https://github.com/tuftsdev/WebProgramming/blob/gh-pages/examples/google_maps/geolocation_map.html
     google.maps.event.addListener(yourMarker, 'click', function() {
-      infoWindow.setContent(yourMarker.title);
-      infoWindow.open(map, yourMarker);
+        //find closest stop
+        closestStop = findClosest();
+        //set info window content
+        infoWindow.setContent(
+            "Closest to " + closestStop.sttnName + " Station, " + (closestStop.sttnDist*0.0006213712).toFixed(2) + " miles"
+        );
+        //check to see if this is already on the map.
+        if (quickRoute) {
+            //if true set vals to null
+            quickRoute.setMap(null);
+            targetStation.setMap(null);
+        }
+        //draw new polyline
+        quickRoute = new google.maps.Polyline({
+            path: [ yourLocation, closestStop.sttnLL ],
+            geodesic: true,
+            strokeColor: '#0378cf',
+            strokeOpacity: 0.75,
+            strokeWeight: 5,
+            map: map
+        })
+        //draw circle over target station
+        targetStation = new google.maps.Circle({
+          strokeColor: '#4A7BC7',
+          strokeOpacity: 0.85,
+          strokeWeight: 2,
+          fillColor: '#4A7BC7',
+          fillOpacity: 0.55,
+          map: map,
+          center: closestStop.sttnLL,
+          radius: 450
+        })
+        //pop up infoWindow for perusal
+        infoWindow.open(map, yourMarker);
     });
+    //polyline close on infowindow exit
+    //from https://stackoverflow.com/questions/6777721/google-maps-api-v3-infowindow-close-event-callback
+    google.maps.event.addListener(infoWindow, 'closeclick', function() {
+        quickRoute.setMap(null);
+        targetStation.setMap(null);
+    });
+}
 
-    return;
-
-  
+function findClosest() {
+  //for each in station list
+  //find distance between marker and station
+  //return shortest distance
+  bestDist = null;
+  var myLatLng = new google.maps.LatLng(yourLocation);
+  for (stop in redLine) {
+    var stopLatLng = new google.maps.LatLng(redLineDict[redLine[stop].stop_name]);
+    var newDist = google.maps.geometry.spherical.computeDistanceBetween( myLatLng, stopLatLng);
+    // console.log(newDist);
+    if (newDist < bestDist || stop == 0) {
+      bestDist = newDist;
+      sttnInfo = {sttnIndex: stop, sttnName: redLine[stop].stop_name, sttnDist: bestDist, sttnLL: stopLatLng}; 
+    }
+  }
+  // var returnInfo = "Closest to " + sttnName + " Station, " + (bestDist*0.0006213712).toFixed(2) + " miles";
+  // console.log(returnInfo);
+  // return returnInfo;
+  return sttnInfo;
 }
