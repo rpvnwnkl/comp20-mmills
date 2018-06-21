@@ -282,7 +282,7 @@ function mapMe() {
     //and https://github.com/tuftsdev/WebProgramming/blob/gh-pages/examples/google_maps/geolocation_map.html
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
-            var yourLocation = {
+            yourLocation = {
                 lat: position.coords.latitude,
                 lng: position.coords.longitude
             };
