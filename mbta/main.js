@@ -234,13 +234,14 @@ function drawStations() {
         // Open info window on click of marker
         var lastStation = markers[i];
         markers[i].stop_id = redLine[i].stop_id;
-        console.log(lastStation);
-        console.log(i);
+        markers[i].stop_name = redLine[i].stop_name;
+        // console.log(lastStation);
+        // console.log(i);
         google.maps.event.addListener(markers[i], 'click', function() {
             getStationInfo(this, function(stationMarker) {
-                console.log("testing 1");
-                console.log(stationInfoWindow.content);
-                console.log(stationMarker);
+                // console.log("testing 1");
+                // console.log(stationInfoWindow.content);
+                // console.log(stationMarker);
                 openWindow(stationMarker);
                 // stationInfoWindow.open(map, this);
                 console.log("returned again");
@@ -250,6 +251,8 @@ function drawStations() {
             function openWindow(stationMarker) {
               console.log("inside function");
               console.log(stationInfoWindow);
+              // stationInfoWindow.setContent(stationMarker.title);
+              // console.log(stationInfoWindow);
               stationInfoWindow.open(map, stationMarker);
             }
         });
@@ -410,19 +413,25 @@ function getStationInfo(sttn, callBack) {
             schedDiv = "";
 
             for (i in trainSched.data) {
-                arrivalTime = trainSched.data[i].attributes.arrival_time; 
+                arrivalTime = (new Date(trainSched.data[i].attributes.arrival_time)).toLocaleTimeString('en-US'); 
                 direction = trainSched.data[i].attributes.direction_id;
                 //need to format time here...
                 if (direction) {
-                    rightDiv += "<span>" + arrivalTime + "</span>";
+                    rightDiv += "<div>" + arrivalTime + "</div>";
                 } else {
-                    leftDiv += "<span>" + arrivalTime + "</span>";
+                    leftDiv += "<div>" + arrivalTime + "</div>";
                 }
             }
-            schedDiv = "<div class='schedule'><div class='left'>"+leftDiv+"</div><div class='right'>"+rightDiv+"</div></div>";
+            schedDiv = "\
+                <div class='schedule'>\
+                    <div class='desc'><h3>Nexts trains at "+sttn.stop_name+" Station:</h3></div>\
+                    <div class='left'><h3>Ashmont/Braintree</h3>"+leftDiv+"</div>\
+                    <div class='right'><h3>Alewife</h3>"+rightDiv+"</div>\
+                </div>";
             console.log("online");
-            stationInfoWindow.content = schedDiv;
+            stationInfoWindow.setContent(schedDiv);
             callBack(sttn);
+            // callBack();
         }
     };
     request.send(null);

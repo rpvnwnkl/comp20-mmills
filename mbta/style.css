@@ -6,3 +6,16 @@ html, body {
 #map {
     height: 100%;
 } 
+.schedule {
+    margin: auto;
+    margin-bottom: 1em;
+    padding: 0.66em 1em 0.5em;
+}
+.left {
+    display: inline-block;
+    float: left;
+}
+.right {
+    display: inline-block;
+    padding-left: 1em;
+}
