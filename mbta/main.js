@@ -3,12 +3,17 @@ var map;
 var markers = [];
 var quickRoute = null;
 var targetStation = null;
+var trainSched = null;
+
+
+var request = new XMLHttpRequest();
 
 //default location in case geolocation not active.
 var yourLocation = {lat: 42.4082152, lng: -71.1162397};
 
 //create info window variable
 var infoWindow;
+var stationInfoWindow;
 
 redLineUrl = "https://upload.wikimedia.org/wikipedia/commons/c/c5/Red_flag_waving.svg";
 yourIconUrl = "https://fallout4.wiki/images/layout/vault-boy-happy.png";
@@ -191,6 +196,7 @@ var routeList = [AlewifeRoute, BraintreeRoute, AshmontRoute];
 //initializes the map and calls drawing functions
 function initMap() {
     infoWindow = new google.maps.InfoWindow();
+    stationInfoWindow = new google.maps.InfoWindow();
 
     //intiMap mostly from https://developers.google.com/maps/documentation/javascript/geolocation#try-it-yourself
     map = new google.maps.Map(document.getElementById('map'), {
@@ -217,10 +223,37 @@ function drawStations() {
         markers.push(new google.maps.Marker({
             position: redLineDict[redLine[i].stop_name], 
             map: map,
+            // title: redLine[i].stop_name,
             title: redLine[i].stop_name,
-            icon: redLineStationImage 
-    }));
-  }
+            icon: redLineStationImage,
+        }));
+        //Add on-event listener
+        //for the last station pushed to markers array, add on-click and off-click listeners
+        //call a function that pull train data for station
+        //populate infoWindow (or alt infoWindow) with arrival details
+        // Open info window on click of marker
+        var lastStation = markers[i];
+        markers[i].stop_id = redLine[i].stop_id;
+        console.log(lastStation);
+        console.log(i);
+        google.maps.event.addListener(markers[i], 'click', function() {
+            getStationInfo(this, function(stationMarker) {
+                console.log("testing 1");
+                console.log(stationInfoWindow.content);
+                console.log(stationMarker);
+                openWindow(stationMarker);
+                // stationInfoWindow.open(map, this);
+                console.log("returned again");
+            });
+            console.log("outside function");
+            console.log(stationInfoWindow.content);
+            function openWindow(stationMarker) {
+              console.log("inside function");
+              console.log(stationInfoWindow);
+              stationInfoWindow.open(map, stationMarker);
+            }
+        });
+    }
 }
 
 //Takes a list of stop locations and draws a polyline between them
@@ -342,4 +375,56 @@ function findClosest() {
   // console.log(returnInfo);
   // return returnInfo;
   return sttnInfo;
+}
+
+function getStationInfo(sttn, callBack) {
+    //pull ID from redLine object
+    //query HTTP site
+    //parse json
+    //call to format info
+    //return formatted info
+    //http query from https://github.com/tuftsdev/WebProgramming/blob/gh-pages/examples/ajax/whereintheworld.html
+    // ...HTTP method (string), URL (string), asynch (boolean)
+    request.open("GET", "https://defense-in-derpth.herokuapp.com/redline/schedule.json?stop_id="+sttn.stop_id, true);
+    // Step 2: Set up callback function to deal with HTTP response data
+    request.onreadystatechange = function() {
+        if (request.readyState == 4 && request.status == 200) {
+          //  console.log("Gddot the data back!");
+          //  data = request.responseText;
+          //  console.log(data);
+          //  trainSched = JSON.parse(data);
+          trainSched = JSON.parse(request.responseText);
+        }
+        else if (request.readyState == 4 && request.status != 200) {
+           // think 404 or 500
+           trainSched = null;
+        }
+        else {
+           console.log("In progress...");
+           trainSched = null;
+        }
+        if (trainSched) {
+            // return trainSched;
+            leftDiv = "";
+            rightDiv = "";
+            schedDiv = "";
+
+            for (i in trainSched.data) {
+                arrivalTime = trainSched.data[i].attributes.arrival_time; 
+                direction = trainSched.data[i].attributes.direction_id;
+                //need to format time here...
+                if (direction) {
+                    rightDiv += "<span>" + arrivalTime + "</span>";
+                } else {
+                    leftDiv += "<span>" + arrivalTime + "</span>";
+                }
+            }
+            schedDiv = "<div class='schedule'><div class='left'>"+leftDiv+"</div><div class='right'>"+rightDiv+"</div></div>";
+            console.log("online");
+            stationInfoWindow.content = schedDiv;
+            callBack(sttn);
+        }
+    };
+    request.send(null);
+
 }
