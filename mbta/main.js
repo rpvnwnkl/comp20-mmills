@@ -159,7 +159,6 @@ var redLineDict = {};
 for (i = 0; i < redLine.length; i++) {
     redLineDict[redLine[i].stop_name] = {lat: redLine[i].stop_lat, lng: redLine[i].stop_lon};
 };
-console.log(redLineDict);
 //listing all the routes to use for pathways
 var AlewifeRoute = [
     "Alewife",
@@ -203,7 +202,6 @@ function initMap() {
         center: redLineDict['South Station'],
         zoom: 14 
     });
-    console.log('goigng to mapme');
     mapMe();
 }
 
@@ -235,26 +233,10 @@ function drawStations() {
         var lastStation = markers[i];
         markers[i].stop_id = redLine[i].stop_id;
         markers[i].stop_name = redLine[i].stop_name;
-        // console.log(lastStation);
-        // console.log(i);
         google.maps.event.addListener(markers[i], 'click', function() {
             getStationInfo(this, function(stationMarker) {
-                // console.log("testing 1");
-                // console.log(stationInfoWindow.content);
-                // console.log(stationMarker);
-                openWindow(stationMarker);
-                // stationInfoWindow.open(map, this);
-                console.log("returned again");
+                stationInfoWindow.open(map, stationMarker);
             });
-            console.log("outside function");
-            console.log(stationInfoWindow.content);
-            function openWindow(stationMarker) {
-              console.log("inside function");
-              console.log(stationInfoWindow);
-              // stationInfoWindow.setContent(stationMarker.title);
-              // console.log(stationInfoWindow);
-              stationInfoWindow.open(map, stationMarker);
-            }
         });
     }
 }
@@ -368,15 +350,11 @@ function findClosest() {
   for (stop in redLine) {
     var stopLatLng = new google.maps.LatLng(redLineDict[redLine[stop].stop_name]);
     var newDist = google.maps.geometry.spherical.computeDistanceBetween( myLatLng, stopLatLng);
-    // console.log(newDist);
     if (newDist < bestDist || stop == 0) {
       bestDist = newDist;
       sttnInfo = {sttnIndex: stop, sttnName: redLine[stop].stop_name, sttnDist: bestDist, sttnLL: stopLatLng}; 
     }
   }
-  // var returnInfo = "Closest to " + sttnName + " Station, " + (bestDist*0.0006213712).toFixed(2) + " miles";
-  // console.log(returnInfo);
-  // return returnInfo;
   return sttnInfo;
 }
 
@@ -392,18 +370,13 @@ function getStationInfo(sttn, callBack) {
     // Step 2: Set up callback function to deal with HTTP response data
     request.onreadystatechange = function() {
         if (request.readyState == 4 && request.status == 200) {
-          //  console.log("Gddot the data back!");
-          //  data = request.responseText;
-          //  console.log(data);
-          //  trainSched = JSON.parse(data);
           trainSched = JSON.parse(request.responseText);
         }
         else if (request.readyState == 4 && request.status != 200) {
-           // think 404 or 500
            trainSched = null;
         }
         else {
-           console.log("In progress...");
+          //  console.log("In progress...");
            trainSched = null;
         }
         if (trainSched) {
@@ -415,7 +388,6 @@ function getStationInfo(sttn, callBack) {
             for (i in trainSched.data) {
                 arrivalTime = (new Date(trainSched.data[i].attributes.arrival_time)).toLocaleTimeString('en-US'); 
                 direction = trainSched.data[i].attributes.direction_id;
-                //need to format time here...
                 if (direction) {
                     rightDiv += "<div>" + arrivalTime + "</div>";
                 } else {
@@ -428,10 +400,8 @@ function getStationInfo(sttn, callBack) {
                     <div class='left'><h3>Ashmont/Braintree</h3>"+leftDiv+"</div>\
                     <div class='right'><h3>Alewife</h3>"+rightDiv+"</div>\
                 </div>";
-            console.log("online");
             stationInfoWindow.setContent(schedDiv);
             callBack(sttn);
-            // callBack();
         }
     };
     request.send(null);
