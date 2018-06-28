@@ -5,6 +5,9 @@ var quickRoute = null;
 var targetStation = null;
 var trainSched = null;
 
+var apiUrl = 'https://infinite-castle-48350.herokuapp.com/redline/schedule.json?stop_id=';
+// var apiUrl = 'http://localhost:3000/redline/schedule.json?stop_id=';
+
 
 var request = new XMLHttpRequest();
 
@@ -366,7 +369,7 @@ function getStationInfo(sttn, callBack) {
     //return formatted info
     //http query from https://github.com/tuftsdev/WebProgramming/blob/gh-pages/examples/ajax/whereintheworld.html
     // ...HTTP method (string), URL (string), asynch (boolean)
-    request.open("GET", "https://defense-in-derpth.herokuapp.com/redline/schedule.json?stop_id="+sttn.stop_id, true);
+    request.open("GET", apiUrl+sttn.stop_id, true);
     // Step 2: Set up callback function to deal with HTTP response data
     request.onreadystatechange = function() {
         if (request.readyState == 4 && request.status == 200) {
