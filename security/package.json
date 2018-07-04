@@ -1,0 +1,11 @@
+{
+	"name": "server-vuln",
+	"version": "3.0.0",
+	"dependencies": {
+		"express": "latest",
+		"mongodb": "^2.2.33",
+		"body-parser": "latest",
+		"validator": "latest",
+		"compression": "latest"
+	}
+}
